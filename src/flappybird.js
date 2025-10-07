@@ -1,36 +1,36 @@
-//board
+// Board
 let board;
-let _boardwidth = 360;
-let _boardHeight = 640;
+let boardWidth = 360;
+let boardHeight = 640;
 let context;
 
-//bird
-let _birdWidth = 34;
-let _birdHeight = 24;
-let _birdx = _birdWidth / 8;
-let _birdY = _birdHeight / 2;
+// Bird
+let birdWidth = 34;
+let birdHeight = 24;
+let birdX = birdWidth / 8;
+let birdY = birdHeight / 2;
 let birdImg;
 
-//pipes
-let _pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
-let _pipeHeight = 512;
-let _pipeX = _boardwidth;
+// Pipes
+let pipeWidth = 64; // width/height ratio = 384/3072 = 1/8
+let pipeHeight = 512;
+let pipeX = boardWidth;
 let pipeY = 0;
 
 let topPipeImg;
 let bottomPipeImg;
 
-window.load = function () {
+window.onload = function () {
   board = document.getElementById("board");
-  board.height = _boardHeight;
-  board.width = _boardwidth;
-  context = board.getcontext("2d");
+  board.width = boardWidth;
+  board.height = boardHeight;
+  context = board.getContext("2d");
 
-  //draw falppy bird
-  context.fillstyle = "green";
+  // Draw flappy bird (temporary green rectangle)
+  context.fillStyle = "green";
   context.fillRect(100, 100, 50, 30);
 
-  //load images
+  // Load bird image
   birdImg = new Image();
   birdImg.src = "./flappybird.png";
   birdImg.onload = function () {
