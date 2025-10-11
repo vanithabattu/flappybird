@@ -1,8 +1,9 @@
-body
-{
-    background-color: blueviolet;
+body {
+    font-family:'Courier New', Courier, monospace;
+    text-align: center;
 }
-canvas
-{
-    background-image: url(flappybirdbg.png)
+
+#board {
+    /* background-color: skyblue; */
+    background-image: url("./flappybirdbg.png");
 }
