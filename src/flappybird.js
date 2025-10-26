@@ -35,7 +35,10 @@ let gameOver = false;
 let score = 0;
 let pipeInterval = null;
 
-window.onload = function () {
+window.onload = initializeGame;
+
+function initializeGame()
+{
   board = document.getElementById("board");
   board.height = boardHeight;
   board.width = boardWidth;
@@ -57,54 +60,55 @@ window.onload = function () {
 
 // Main game loop
 function update() {
-  requestAnimationFrame(update);
-  context.clearRect(0, 0, board.width, board.height);
+  context.clearRect(0, 0, board.width, board.height); // Clear canvas
 
   if (!gameOver) {
-    // Gravity
-    velocityY += gravity;
-    bird.y = Math.max(bird.y + velocityY, 0);
-
-    // Ground collision
-    if (bird.y + bird.height >= board.height) {
-      bird.y = board.height - bird.height;
-      velocityY = 0;
-      gameOver = true;
-      clearInterval(pipeInterval);
-    }
+    applyGravityToBird();
+    checkGroundCollision();
   }
+  updateAndDrawPipes();
+  rendergame();
+  requestAnimationFrame(update); // Keep loop running
+  // Show Game Over overlay if game ended
+  if (gameOver) showGameOver();
+}
 
-  // Move and draw pipes
+function applyGravityToBird() {
+  velocityY += gravity;
+  bird.y = Math.max(bird.y + velocityY, 0); // Move bird down, prevent going above canvas
+}
+function checkGroundCollision() {
+  if (bird.y + bird.height >= board.height) {
+    bird.y = board.height - bird.height;
+    velocityY = 0;
+    gameOver = true;
+    clearInterval(pipeInterval);
+  }
+}
+function updateAndDrawPipes()
+  {
   for (let i = 0; i < pipeArray.length; i++) {
     let pipe = pipeArray[i];
-
-    if (!gameOver) pipe.x += velocityX;
-
-    context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
-
-    // Score
+    if (!gameOver) pipe.x += velocityX; // Move pipe left
+    context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height); // Draw pipe
+    // Score increment when bird passes pipe
     if (!pipe.passed && bird.x > pipe.x + pipe.width) {
       pipe.passed = true;
       score++;
     }
-
-    // Collision
     if (detectCollision(bird, pipe)) {
-      gameOver = true;
-      clearInterval(pipeInterval);
+      console.log(bird);
+      gameOver = true; // End game if collision
+      clearInterval(pipeInterval); // Stop generating new pipes
     }
   }
-
-  // Draw bird
-  drawBird();
-
-  // Draw score
+}
+function rendergame() 
+{
+  drawBird(); // Draw bird
   context.fillStyle = "white";
   context.font = "20px Arial";
-  context.fillText("" + score, 10, 25);
-
-  // Draw Game Over overlay
-  if (gameOver) showGameOver();
+  context.fillText("" + score, 10, 25); // Display score at top-left
 }
 
 // Draw bird
